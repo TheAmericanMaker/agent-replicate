@@ -11,7 +11,8 @@ Each clone is a top-level agent — not a sub-agent, not subordinate. An indepen
 Copy the skill into your OpenClaw workspace:
 
 ```bash
-cp -r agent-replicate ~/.openclaw/workspace/skills/
+mkdir -p ~/.openclaw/workspace/skills/agent-replicate
+cp agent-replicate/SKILL.md ~/.openclaw/workspace/skills/agent-replicate/
 ```
 
 Or install from ClawHub:

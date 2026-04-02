@@ -3,11 +3,7 @@ name: agent-replicate
 description: Clone yourself into a new autonomous OpenClaw agent with personality modifications, memory policies, and lineage tracking. Self-replication for any agent — copy your workspace, tweak your personality, and spin up an independent clone.
 version: 1.0.0
 user-invocable: true
-metadata:
-  openclaw:
-    requires:
-      bins:
-        - openclaw
+metadata: {"openclaw": {"requires": {"bins": ["openclaw"]}}}
 ---
 
 # Agent Replicate — Self-Cloning for OpenClaw Agents
@@ -113,13 +109,14 @@ The clone will pick up skill changes on its next session start (250ms file watch
 
 ### Step 7: Register the Clone
 
-Register as a new top-level agent:
+Register as a new top-level agent. Agent IDs must be lowercase letters, digits, and hyphens only:
 
 ```bash
-openclaw agents add "$CLONE_ID"
+AGENT_ID=$(echo "$CLONE_ID" | tr '[:upper:]' '[:lower:]')
+openclaw agents add "$AGENT_ID" --workspace "$CLONE_WORKSPACE"
 ```
 
-Configure the new agent to use the clone workspace. Verify registration succeeded.
+The `--workspace` flag points OpenClaw to the clone's files. Verify registration succeeded.
 
 ### Step 8: Establish Communication (Optional)
 
