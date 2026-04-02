@@ -47,12 +47,14 @@ Ask your operator (or determine from context):
 
 ### Step 2: Create Clone Workspace
 
-Use the `exec` tool to copy your workspace:
+Use the `exec` tool to copy your workspace. First, find your own workspace path — it may be the default (`~/.openclaw/workspace`) or a named workspace (`~/.openclaw/workspace-<name>`):
 
 ```bash
-PARENT_WORKSPACE="$HOME/.openclaw/workspace"
+# Find your workspace by locating your SOUL.md
+PARENT_WORKSPACE=$(dirname "$(find ~/.openclaw -name 'SOUL.md' -path '*/workspace*' | head -1)")
 CLONE_ID="<clone-name-from-step-1>"
-CLONE_WORKSPACE="$HOME/.openclaw/workspace-${CLONE_ID}"
+AGENT_ID=$(echo "$CLONE_ID" | tr '[:upper:]' '[:lower:]')
+CLONE_WORKSPACE="$HOME/.openclaw/workspace-${AGENT_ID}"
 
 cp -r "$PARENT_WORKSPACE" "$CLONE_WORKSPACE"
 ```
