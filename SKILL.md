@@ -3,7 +3,11 @@ name: agent-replicate
 description: Clone yourself into a new autonomous OpenClaw agent with personality modifications, memory policies, and lineage tracking. Self-replication for any agent — copy your workspace, tweak your personality, and spin up an independent clone.
 version: 1.0.0
 user-invocable: true
-metadata: {"openclaw": {"requires": {"bins": ["openclaw"]}}}
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - openclaw
 ---
 
 # Agent Replicate — Self-Cloning for OpenClaw Agents
