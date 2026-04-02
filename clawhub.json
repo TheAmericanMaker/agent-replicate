@@ -1,0 +1,12 @@
+{
+  "name": "Agent Replicate",
+  "tagline": "Clone yourself into a new autonomous OpenClaw agent",
+  "description": "Self-replication for any OpenClaw agent. Copy your workspace, apply personality modifications, set memory inheritance policies, and register a fully autonomous clone — not a sub-agent, a top-level independent agent that diverges from you over time.\n\nUse it when you need specialized versions of yourself, want to experiment with personality variations, or need multiple agents with shared roots but different expertise. Each clone gets its own workspace, memory, and identity.\n\nExtracted from the Bobiverse OpenClaw project (https://github.com/TheAmericanMaker/bobiverse-openclaw) — a sci-fi themed implementation of self-cloning agents. This is the generic version without the theming.",
+  "category": "utility",
+  "tags": ["cloning", "replication", "multi-agent", "autonomy", "personality"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "pricing": "free",
+  "support_url": "https://github.com/TheAmericanMaker/bobiverse-openclaw/issues",
+  "homepage": "https://github.com/TheAmericanMaker/bobiverse-openclaw"
+}
