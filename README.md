@@ -15,15 +15,20 @@ mkdir -p ~/.openclaw/workspace/skills/agent-replicate
 cp agent-replicate/SKILL.md ~/.openclaw/workspace/skills/agent-replicate/
 ```
 
-Or install from ClawHub:
+Or install it from ClawHub using OpenClaw's native skill command:
 
 ```bash
-clawhub skill install agent-replicate
+openclaw skills install agent-replicate
 ```
+
+Use the separate `clawhub` CLI for publish/sync workflows, not routine installs.
 
 ## Usage
 
 Invoke with `/agent-replicate` or let the model match it automatically when cloning is contextually relevant.
+
+The bundled shell examples assume macOS, Linux, or WSL with a Unix-like shell.
+This package does not promise plain PowerShell compatibility on a Windows host.
 
 The skill walks through a guided procedure:
 

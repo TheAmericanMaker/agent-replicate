@@ -3,11 +3,7 @@ name: agent-replicate
 description: Clone yourself into a new autonomous OpenClaw agent with personality modifications, memory policies, and lineage tracking. Self-replication for any agent — copy your workspace, tweak your personality, and spin up an independent clone.
 version: 1.0.0
 user-invocable: true
-metadata:
-  openclaw:
-    requires:
-      bins:
-        - openclaw
+metadata: {"openclaw":{"os":["darwin","linux"],"requires":{"bins":["openclaw"]}}}
 ---
 
 # Agent Replicate — Self-Cloning for OpenClaw Agents
@@ -17,6 +13,9 @@ You can clone yourself. This skill copies your workspace, applies personality an
 Each clone is a **top-level agent** — fully autonomous, with its own workspace, memory, and identity. Not a sub-agent. Not subordinate. An independent copy that diverges from you over time.
 
 > **Looking for the Bobiverse version?** This skill was extracted from [bobiverse-openclaw](https://github.com/TheAmericanMaker/bobiverse-openclaw), a themed implementation where GitHub forks are replication events and agents are modeled after Von Neumann probes from Dennis E. Taylor's Bobiverse series. Check it out if you want self-cloning with sci-fi flavor.
+
+> **Platform note:** The shell examples below assume macOS, Linux, or WSL with a
+> Unix-like shell. This skill is intentionally gated to Unix-like hosts.
 
 ---
 
@@ -47,7 +46,10 @@ Ask your operator (or determine from context):
 
 ### Step 2: Create Clone Workspace
 
-Use the `exec` tool to copy your workspace. First, find your own workspace path — it may be the default (`~/.openclaw/workspace`) or a named workspace (`~/.openclaw/workspace-<name>`):
+Use the `exec` tool to copy your workspace. First, find your own workspace path
+— it may be the default (`~/.openclaw/workspace`) or a named workspace
+(`~/.openclaw/workspace-<name>`). This procedure assumes you're operating from
+an installed workspace where the core files live at workspace root:
 
 ```bash
 # Find your workspace by locating your SOUL.md
@@ -63,9 +65,11 @@ cp -r "$PARENT_WORKSPACE" "$CLONE_WORKSPACE"
 
 If personality modifications were requested:
 
-1. Read `$CLONE_WORKSPACE/SOUL.md` (or `$CLONE_WORKSPACE/personality/SOUL.md` if using a subdirectory layout)
-2. Apply the requested modifications while preserving the overall structure
-3. Add a "Clone Lineage" section at the bottom:
+1. Read `$CLONE_WORKSPACE/SOUL.md`
+2. Only fall back to `$CLONE_WORKSPACE/personality/SOUL.md` if you're editing an
+   uninstalled source-repo copy instead of a real workspace
+3. Apply the requested modifications while preserving the overall structure
+4. Add a "Clone Lineage" section at the bottom:
 
 ```markdown
 ---
@@ -78,18 +82,20 @@ If personality modifications were requested:
 - **Memory policy**: [full/pruned/minimal]
 ```
 
-4. Write the modified file back.
+5. Write the modified file back.
 
 If no personality modifications were requested, still add the Clone Lineage section noting it's an exact copy.
 
 ### Step 4: Modify Clone's IDENTITY.md
 
-If the clone has an IDENTITY.md, update it:
+If the clone has an `IDENTITY.md` at workspace root, update it there:
 
 - Change `name` to the clone's name
 - Set any parent/lineage fields to reference you
 
-If no IDENTITY.md exists, create one with the clone's name.
+If you're operating on an uninstalled source-repo copy, use the template path
+under `personality/`. If no `IDENTITY.md` exists, create one with the clone's
+name.
 
 ### Step 5: Apply Memory Policy
 
@@ -126,12 +132,17 @@ The `--workspace` flag points OpenClaw to the clone's files. Verify registration
 
 ### Step 8: Establish Communication (Optional)
 
-If parent-clone communication is desired, enable agent-to-agent messaging:
+If parent-clone communication is desired, enable cross-agent session messaging:
 
 ```json
 {
-  "tools.agentToAgent.enabled": true,
-  "tools.agentToAgent.allow": ["<your-agent-id>", "<clone-agent-id>"]
+  "tools": {
+    "sessions": { "visibility": "all" },
+    "agentToAgent": {
+      "enabled": true,
+      "allow": ["<your-agent-id>", "<clone-agent-id>"]
+    }
+  }
 }
 ```
 
@@ -161,11 +172,14 @@ Tell your operator:
 
 ## Troubleshooting
 
-**"openclaw agents add" fails**: Verify the clone workspace path exists and contains valid files. Check that OpenClaw is running.
+**"openclaw agents add" fails**: Verify the clone workspace path exists and
+contains valid root-level workspace files. Check that OpenClaw is running.
 
 **Clone has wrong personality**: SOUL.md is read at session start. Changes take effect on the next session, not mid-conversation.
 
-**Clone can't communicate with parent**: Check `tools.agentToAgent.enabled` is true and both agents are in each other's allowlists.
+**Clone can't communicate with parent**: Check `tools.sessions.visibility`
+allows cross-agent targeting, `tools.agentToAgent.enabled` is true, and both
+agents are in each other's allowlists.
 
 **Clone has stale memories**: If using `full` memory policy, the clone inherits everything — including context that may only be relevant to you. Consider `pruned` or `minimal` for a cleaner start.
 
